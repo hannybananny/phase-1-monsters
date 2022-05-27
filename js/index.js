@@ -3,13 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let monsterContainer = document.getElementById('monster-container')
     let monsterForm = document.getElementById('monsterform')
     let page = 1
-    changePage(page)
-
-    monsterForm.addEventListener('submit', handleSubmit)
-    
     let pageNumber = document.getElementById('page')
     
-
+    monsterForm.addEventListener('submit', handleSubmit)
+    
     function renderMonster(monsters){
        let list = monsters.map(m =>{
            return   `<h1>${m.name}</h1>
@@ -45,14 +42,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function nextPage(){
         page++
         changePage(page)
-        pageNumber.innerHTML= page
+        pageNumber.innerHTML= 'Page ' + page
     }
     
     function previousPage(){
         if(page>1){
             page-- 
             changePage(page)
-            pageNumber.innerHTML= page
+            pageNumber.innerHTML= 'Page ' + page
         }
     }
 
@@ -73,4 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
     forwardBtn.addEventListener('click', nextPage)
     backBtn.addEventListener('click', previousPage)
     }
+
+    changePage(page)
+
 })
