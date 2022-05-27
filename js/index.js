@@ -1,27 +1,23 @@
 document.addEventListener('DOMContentLoaded', () => {
-
+    
     let monsterContainer = document.getElementById('monster-container')
     let monsterForm = document.getElementById('monsterform')
-    
-    monsterForm.addEventListener('submit', handleSubmit)
-    const forwardBtn = document.getElementById('forward')
-    forwardBtn.addEventListener('click', getNextFiftyMonsters)
+    let page = 1
+    changePage(page)
 
-    function getFirstFiftyMonsters(){
-        fetch('http://localhost:3000/monsters/?_limit=50')
-        .then(res => res.json())
-        .then(monsters => monsters.forEach(monster => renderMonster(monster)))
-    }
+    monsterForm.addEventListener('submit', handleSubmit)
     
+    let pageNumber = document.getElementById('page')
     
-    
-    function renderMonster(monster){
-        let monsterDisplay = document.createElement('section')
-        monsterDisplay.innerHTML=
-        `<h1>${monster.name}</h1>
-        <h3>Age: ${monster.age}</h3>
-        <p>Bio: ${monster.description}</p>`
-        monsterContainer.appendChild(monsterDisplay)
+
+    function renderMonster(monsters){
+       let list = monsters.map(m =>{
+           return   `<h1>${m.name}</h1>
+           <h3>Age: ${m.age}</h3>
+           <p>Bio: ${m.description}</p>`
+       })
+       
+        monsterContainer.innerHTML = list.join('')
     }
 
     function handleSubmit(e){
@@ -46,11 +42,35 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(res => res.json())
     }
 
-    function getNextFiftyMonsters(){
-        fet
+    function nextPage(){
+        page++
+        changePage(page)
+        pageNumber.innerHTML= page
+    }
+    
+    function previousPage(){
+        if(page>1){
+            page-- 
+            changePage(page)
+            pageNumber.innerHTML= page
+        }
     }
 
-   
-    getFirstFiftyMonsters()
-  
+   function changePage(page){
+    
+   function getNextFiftyMonsters(){
+    
+    fetch(`http://localhost:3000/monsters/?_limit=50&_page=${page}`)
+        .then(res => res.json())
+        .then(monsters => {
+            renderMonster(monsters)
+         })
+        }
+
+    getNextFiftyMonsters()
+    const forwardBtn = document.getElementById('forward')
+    const backBtn = document.getElementById('back')
+    forwardBtn.addEventListener('click', nextPage)
+    backBtn.addEventListener('click', previousPage)
+    }
 })
